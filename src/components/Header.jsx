@@ -1,17 +1,59 @@
-import React from 'react'
-import { Box, Button, styled, Typography } from "@mui/material";
+import React , {useRef} from 'react'
+import { Box, Button, styled, Typography , Grid , IconButton} from "@mui/material";
 import { Link } from 'react-router-dom'
 //img
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import headerImg from '../assets/crypto.webp'
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+const sliderData = [
+    {
+      image: 'https://via.placeholder.com/800x400?text=Image+1',
+      text: 'Stripe gives crypto businesses access to today’s global financial infrastructure. Whether you’re an established crypto business or simply exploring new possibilities, you can process payments for fiat currencies globally through a single integration – with fraud prevention and authorisation optimisation built in.',
+    },
+    {
+      image: 'https://via.placeholder.com/800x400?text=Image+2',
+      text: 'Stripe gives crypto businesses access to today’s global financial infrastructure. Whether you’re an established crypto business or simply exploring new possibilities, you can process payments for fiat currencies globally through a single integration – with fraud prevention and authorisation optimisation built in.',
+    },
+    {
+      image: 'https://via.placeholder.com/800x400?text=Image+3',
+      text: 'Stripe gives crypto businesses access to today’s global financial infrastructure. Whether you’re an established crypto business or simply exploring new possibilities, you can process payments for fiat currencies globally through a single integration – with fraud prevention and authorisation optimisation built in.',
+    },
+  ];
+
+
+//   const useStyles = makeStyles({
+//     arrow: {
+//       color: 'white',
+//       backgroundColor: 'black',
+//       borderRadius: '50%',
+//       padding: '10px',
+//       '&:hover': {
+//         backgroundColor: '#FFFF',
+//       },
+//     },
+//   });
+  
+  const Arrow = ({ className, onClick, icon }) => (
+    <IconButton sx={{border:'1px solid #FFFF'}} className={className} onClick={onClick} style={{ color: '#ffff' }}>
+      {icon}
+    </IconButton>
+  );
+
 
 const Header = () => {
 
+    // const classes = useStyles();
+
     const CustomBox = styled(Box) (({ theme }) => ({
         minHeight: '80vh',
-        display: 'flex',
-        justifyContent: 'center',
+        display: 'flex !important',
+        justifyContent: 'center !important',
+        alignItems: 'center !important',
         // tamanhos
-        gap: theme.spacing(2),
+        gap: theme.spacing(4),
         paddingTop: theme.spacing(10),
         // cor de fundo
         backgroundColor: '#002855',
@@ -34,37 +76,41 @@ const Header = () => {
     }));
 
 
+    const sliderRef = useRef(null);
+
+    const settings = {
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      dots: false,
+      style: {
+        
+        overflow: 'hidden',
+      }
+    };
+
   return  (
-        <CustomBox component='header'>
-            {/*  Box text  */}
-            <BoxText 
+       
+            <Slider ref={sliderRef} {...settings}> 
+            {sliderData.map((slide , index) => (
+                <CustomBox key={index} component={'header'} position={'relative'} overflow={'hidden'}>
+             <BoxText
             component='section'
+            sx={{marginBottom:'15px'}}
             >
-                <Typography
-                variant='h2'
-                component= 'h1'
-                sx={{
-                    fontWeight: 700,
-                    color: '#fff',
-                }}
-                >
-                    Build your crypto business with Stripe
+                <Grid container alignItems="center" mt={2}>
+              <Grid item xs={1} sx={{marginRight:'10px'}}>
+                <Arrow onClick={() => sliderRef.current.slickPrev()} icon={<ArrowBack />} />
+              </Grid>
+              <Grid item xs={8} textAlign={'center'}>
+                <Typography color={'white'} variant="h6" component="div" align="center" textAlign={'start'}>
+                  {slide.text}
                 </Typography>
-
-                <Typography
-                variant='p'
-                component='p'
-                sx={{
-                    py: 3,
-                    lineHeight: 1.6,
-                    color: '#fff',
-                }}
-                >
-                    Stripe gives crypto businesses access to today’s global financial infrastructure. Whether you’re an established crypto business or simply exploring new possibilities, you can process payments for fiat currencies globally through a single integration – with fraud prevention and authorisation optimisation built in.
-                </Typography>
-
                 <Box>
-                    <Button 
+                    {/* <Button 
                     variant='contained'
                     sx={{
                         mr: 2,
@@ -85,7 +131,7 @@ const Header = () => {
                     }}
                     >
                         buy now
-                    </Button>
+                    </Button> */}
                     <Button 
                     component={Link} 
                     to={'/about'}
@@ -112,31 +158,45 @@ const Header = () => {
                         explore
                     </Button>
                 </Box>
+              </Grid>
+              <Grid item xs={1} sx={{marginLeft:'10px'}}>
+                <Arrow onClick={() => sliderRef.current.slickNext()} icon={<ArrowForward />} />
+              </Grid>
+            </Grid>
+
+                
             </BoxText>
 
             <Box sx={theme => ({
                 [theme.breakpoints.down('md')]:{
                     flex: '1',
-                    paddingTop: '30px',
-                    alignSelf: 'center',
+                    // paddingTop: '30px',
+                    // alignSelf: 'center',
                 },
                 [theme.breakpoints.up('md')]:{
-                    flex: '2',
-                    alignSelf: 'flex-end',
+                    flex: '1.5',
+                    // alignSelf: 'flex-end',
                 },
             })}
             >
-                <img
-                src={headerImg}
-                alt="headerImg"
-                style={{ 
-                    width: "100%", 
-                    marginBottom: -15,
-                }}
-                />
+                <Grid container alignItems="center">
+              <Grid item xs={1}>
+                <Arrow   onClick={() => sliderRef.current.slickPrev()} icon={<ArrowBack />} />
+              </Grid>
+              <Grid item xs={9}>
+                <img src={slide.image} alt={`Slide ${index}`} style={{ width: '100%', height: 'auto' }} />
+              </Grid>
+              <Grid item xs={1} sx={{marginLeft:'10px'}}>
+                <Arrow  onClick={() => sliderRef.current.slickNext()} icon={<ArrowForward />} />
+              </Grid>
+            </Grid>
             </Box>
+                </CustomBox>
+            ))}
+            
+            </Slider>
 
-        </CustomBox>
+      
     )
 }
 

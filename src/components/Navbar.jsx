@@ -65,10 +65,10 @@ const Navbar = () => {
                 >
                     B2B Ultimate
                 </Typography>
-                <Box sx={{display: { xs: 'block', sm: 'none' } }}>
+                <Box >
                     <DrawerItem /> 
                 </Box>
-                <ListMenu>
+                {/* <ListMenu>
                     {itemList.map( ( item ) => {
                         const { text } = item;
                         return(
@@ -87,7 +87,7 @@ const Navbar = () => {
                             </ListItem>
                         )
                     })}
-                </ListMenu>
+                </ListMenu> */}
             </StyledToolbar>
         </AppBar>
     )
