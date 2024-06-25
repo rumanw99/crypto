@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {  
   styled, 
   useTheme,
@@ -9,10 +9,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@mui/material'
-// rotas
+} from '@mui/material';
 import { Link } from 'react-router-dom';
-// icons
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
@@ -30,7 +28,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-//rotas
+const Overlay = styled('div')(({ theme }) => ({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  zIndex: theme.zIndex.drawer - 1,
+  opacity: 1,
+  visibility: 'visible',
+  transition: 'visibility 0s, opacity 0.5s linear',
+}));
+
 const itemList = [
   {
     text: "Home",
@@ -49,11 +59,10 @@ const itemList = [
   }
 ];
 
-
 const DrawerItem = () => {
-
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -65,26 +74,28 @@ const DrawerItem = () => {
   return (
     <>
       <IconButton
-      color="inherit"
-      aria-label="open drawer"
-      edge="end"
-      onClick={handleDrawerOpen}
-      sx={{ ...(open && { display: 'none' }) }}
+        color="inherit"
+        aria-label="open drawer"
+        edge="end"
+        onClick={handleDrawerOpen}
+        sx={{ ...(open && { display: 'none' }) }}
       >
         <MenuIcon />
       </IconButton>
 
+      {open && <Overlay onClick={handleDrawerClose} />}
+
       <Drawer
-      sx={{
+        sx={{
           flexGrow: 1,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-          width: drawerWidth,
+            width: drawerWidth,
           },
-      }}
-      variant="persistent"
-      anchor="right"
-      open={open}
+        }}
+        variant="persistent"
+        anchor="right"
+        open={open}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
@@ -93,39 +104,39 @@ const DrawerItem = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {itemList.map( ( item ) => {
+          {itemList.map((item) => {
             const { text } = item;
-            return(
+            return (
               <ListItem 
-              key={text} 
-              component={Link} 
-              to={item.to}
-              sx={{
-                color: '#414141',
-                "&:hover": {
-                  backgroundColor: '#e9e5e5',
-                  color: '#1c2859',
-                }
-              }}
-              >
-                <ListItemIcon
+                key={text} 
+                component={Link} 
+                to={item.to}
                 sx={{
-                  "&:hover":{
-                    backgroundColor: 'transparent',
+                  color: '#414141',
+                  "&:hover": {
+                    backgroundColor: '#e9e5e5',
                     color: '#1c2859',
                   }
                 }}
+              >
+                <ListItemIcon
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: 'transparent',
+                      color: '#1c2859',
+                    }
+                  }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-            )
+            );
           })}
         </List>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
 export default DrawerItem;
